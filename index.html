@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab31 Sunday Survival: The Ultimate Multitasking Challenge</title>
+ <style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap');
+
+/* Screen Management */
+.screen {
+    display: none;
+}
+
+/* Base Styles */
+:root {
+    --primary-color: #00ff00;
+    --secondary-color: #ff00ff;
+    --danger-color: #ff0000;
+    --background-dark: #0a0a0a;
+    --text-color: #ffffff;
+    --glow-color: rgba(0, 255, 0, 0.5);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-dark);
+    color: var(--text-color);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Title Screen */
+#titleScreen {
+    text-align: center;
+    padding: 2rem;
+}
+
+#titleScreen h1 {
+    font-family: 'Press Start 2P', cursive;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+}
+
+.title-line {
+    display: block;
+    font-size: 2.5rem;
+    text-shadow: 0 0 10px var(--glow-color);
+    animation: textGlow 2s infinite alternate;
+}
+
+.tagline {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: var(--secondary-color);
+}
+
+.instructions {
+    margin: 2rem 0;
+}
+
+.instruction-item {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.instruction-icon {
+    font-size: 1.5rem;
+}
+
+/* Game Screen */
+.status-section {
+    margin-bottom: 1.5rem;
+}
+
+.status-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.status-bar {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.bar-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.bar-container {
+    height: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bar {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.parenting-bar {
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+}
+
+.website-bar {
+    background: linear-gradient(90deg, #2196F3, #03A9F4);
+}
+
+/* Event Section */
+.event-display {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.event-header {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.event-text {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.event-timer-container {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.event-timer {
+    height: 100%;
+    background: var(--primary-color);
+    transition: width 0.1s linear;
+}
+
+/* Controls Section */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.action-button {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--primary-color);
+    color: var(--text-color);
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.action-button:hover {
+    background: var(--primary-color);
+    color: var(--background-dark);
+    transform: translateY(-2px);
+}
+
+.button-icon {
+    font-size: 1.2rem;
+}
+
+/* Stats Section */
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-value {
+    color: var(--primary-color);
+}
+
+/* Game Over Screen */
+.game-over-content {
+    text-align: center;
+    padding: 2rem;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.game-over-content h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2.5rem;
+    color: var(--danger-color);
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    margin-bottom: 2rem;
+    animation: textGlow 2s infinite alternate;
+}
+
+.score-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+}
+
+.final-score, .high-score {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.8rem;
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.score-label {
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.score-value {
+    color: var(--primary-color);
+    text-shadow: 0 0 10px var(--glow-color);
+    font-weight: bold;
+}
+
+.game-over-message {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    margin: 2rem 0;
+    padding: 1rem;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Button Styles */
+.glow-button {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.glow-button:hover {
+    background: var(--primary-color);
+    color: var(--background-dark);
+    box-shadow: 0 0 20px var(--glow-color);
+}
+
+/* Animations */
+@keyframes textGlow {
+    from {
+        text-shadow: 0 0 10px var(--glow-color);
+    }
+    to {
+        text-shadow: 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
+    }
+}
+
+/* Stress Level Effects */
+.stress-level-1 .game-container {
+    animation: subtle-shake 5s infinite;
+}
+
+.stress-level-2 .game-container {
+    animation: medium-shake 3s infinite;
+}
+
+.stress-level-3 .game-container {
+    animation: intense-shake 1s infinite;
+}
+
+@keyframes subtle-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}
+
+@keyframes medium-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes intense-shake {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-8px, 4px); }
+    75% { transform: translate(8px, -4px); }
+}
+
+/* Event Expiration */
+.expired-event {
+    color: var(--danger-color);
+    animation: flash 0.5s;
+}
+
+@keyframes flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Coffee Boost Animation */
+.coffee-boost {
+    animation: boost 1s ease-out;
+}
+
+@keyframes boost {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Active Button State */
+.active-button {
+    transform: scale(0.95);
+}
+
+/* Screen Shake */
+.shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .title-line {
+        font-size: 1.8rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .game-stats {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+}
+ </style>
+</head>
+<body>
+    <div class="game-container" id="gameContainer"> <!-- Added id for dynamic class updates -->
+        <!-- Title Screen -->
+        <div id="titleScreen">
+            <h1>
+                <span class="title-line" data-text="LAB31">LAB31</span>
+                <span class="title-line" data-text="SUNDAY">SUNDAY</span>
+                <span class="title-line" data-text="SPRINT">SPRINT</span>
+            </h1>
+        
+            <div class="tagline">ONLY THE STRONG WILL SURVIVE.</div>
+        
+            <div class="instructions">
+                <div class="instruction-item">
+                    <span class="instruction-icon">🎮</span>
+                    <span class="instruction-text">Manage parenting crises while coding your heart out</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="instruction-icon">⚡</span>
+                    <span class="instruction-text">React quickly to keep both sanity and progress bars up</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="instruction-icon">🔄</span>
+                    <span class="instruction-text">Master the art of context switching for maximum points</span>
+                </div>
+            </div>
+        
+            <button id="startButton" class="glow-button">
+                <span class="button-text">Strap In</span>
+            </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen" id="gameScreen">
+            <div class="status-section">
+                <div class="status-bars">
+                    <div class="status-bar">
+                        <div class="bar-label">
+                            <label>Parenting Sanity</label>
+                            <span class="bar-value" id="parentingValue">50%</span>
+                        </div>
+                        <div class="bar-container">
+                            <div id="parentingBar" class="bar parenting-bar" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                    <div class="status-bar">
+                        <div class="bar-label">
+                            <label>Website Progress</label>
+                            <span class="bar-value" id="websiteValue">0%</span>
+                        </div>
+                        <div class="bar-container">
+                            <div id="websiteBar" class="bar website-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-section">
+                <div class="event-display">
+                    <div class="event-header">Current Crisis:</div>
+                    <div id="eventDescription" class="event-text"></div>
+                    <div class="event-timer-container">
+                        <div id="eventTimer" class="event-timer"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <div class="action-buttons">
+                    <button id="parentButton" class="action-button parent-action">
+                        <span class="button-icon">👶</span>
+                        <span class="button-text">Parent</span>
+                    </button>
+                    <button id="codeButton" class="action-button code-action">
+                        <span class="button-icon">💻</span>
+                        <span class="button-text">Code</span>
+                    </button>
+                    <button id="coffeeButton" class="action-button coffee-action">
+                        <span class="button-icon">☕</span>
+                        <span class="button-text">Coffee (<span id="coffeeCount">3</span>)</span> <!-- Updated coffee count display -->
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">⏰</span>
+                        <span class="stat-label">Time:</span>
+                        <span id="timer" class="stat-value">02:00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🎯</span>
+                        <span class="stat-label">Score:</span>
+                        <span id="score" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🔥</span>
+                        <span class="stat-label">Combo:</span>
+                        <span id="combo" class="stat-value">1x</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div class="screen" id="gameOverScreen">
+            <div class="game-over-content">
+                <h2>Game Over!</h2>
+                <div class="score-section">
+                    <div class="final-score">
+                        <span class="score-label">Final Score:</span>
+                        <span id="finalScore" class="score-value">0</span>
+                    </div>
+                    <div class="high-score">
+                        <span class="score-label">High Score:</span>
+                        <span id="highScore" class="score-value">0</span>
+                    </div>
+                </div>
+                <div class="game-over-message" id="gameOverMessage">
+                    <!-- Dynamically inserted based on score -->
+                </div>
+                <button id="playAgainButton" class="glow-button">
+                    <span class="button-text">One More Try!</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+                class EventManager {
+            constructor() {
+                this.parentingEvents = [
+                    { type: 'parenting', description: 'Sudden sibling rivalry erupts over a single LEGO brick. World War III imminent.', points: 30, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: 'Finds glitter. *Everywhere*.  Even places glitter should scientifically not be.', points: 25, duration: 6, urgency: 'high' },
+                    { type: 'parenting', description: 'Demands help building a "time machine" out of cardboard boxes. Requires PhD in temporal physics.', points: 20, duration: 7, urgency: 'medium' },
+                    { type: 'parenting', description: 'Lost library book emergency. It\'s due *today*. Panic ensues.', points: 20, duration: 6, urgency: 'medium' },
+                    { type: 'parenting', description: 'Science fair project due tomorrow.  "Volcano" still needs to erupt. Now.', points: 30, duration: 8, urgency: 'high' },
+                    { type: 'parenting', description: 'Unexplained tantrum over the *wrong* kind of cheese stick. Logic has left the building.', points: 22, duration: 6, urgency: 'high' },
+                    { type: 'parenting', description: 'Accidentally dyed laundry pink.  "But I WANTED to wear my white shirt!"', points: 18, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: 'Epic juice box spill in the car. Sticky. Everywhere. Forever.', points: 20, duration: 6, urgency: 'medium' },
+                    { type: 'parenting', description: 'Playdate drama: "He looked at my toy!"  Negotiations break down.', points: 15, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: 'Homework meltdown over Common Core math.  You also don\'t understand it.', points: 28, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: '"I\'m bored!"  ... despite room filled with toys, screens, and life itself.', points: 12, duration: 4, urgency: 'low' },
+                    { type: 'parenting', description: 'Suddenly remembers "Show and Tell" is tomorrow.  Nothing to show. Hysteria.', points: 25, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: 'Requests help with "epic" fort building.  Living room now a disaster zone.', points: 15, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: 'Discovers old photos of you "back in the day."  Unrelenting teasing commences.', points: 18, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: 'Asks a question about "where babies come from" in front of *everyone* at the grocery store.', points: 22, duration: 6, urgency: 'medium' },
+                    { type: 'parenting', description: '"Monster under the bed" situation. Requires elaborate monster spray and flashlight.', points: 15, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: 'Wants to learn TikTok dances. Your knees are not cooperating.', points: 18, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: 'Friendship breakup drama.  "She said my shoes were basic!"  Tears and heartbreak.', points: 25, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: 'Invents a new imaginary friend with complex backstory and needs. You must remember everything.', points: 20, duration: 6, urgency: 'medium' },
+                    { type: 'parenting', description: '"I don\'t LIKE crusts anymore!"  Lunchbox negotiations begin. Again.', points: 12, duration: 4, urgency: 'low' },
+                    { type: 'parenting', description: 'Pet hamster escapes cage.  House now a tiny rodent adventure park.', points: 30, duration: 8, urgency: 'high' },
+                    { type: 'parenting', description: 'Recital costume malfunction 5 minutes before showtime. Safety pins to the rescue.', points: 28, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: 'Sleepover chaos.  Suddenly responsible for 4 small humans hyped on sugar and zero sleep.', points: 30, duration: 8, urgency: 'high' },
+                    { type: 'parenting', description: 'Realizes they left homework *at school*.  Stomach plummets.  Your evening is now a rescue mission.', points: 25, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: 'Needs a costume for "Character Day" TOMORROW.  DIY crafting frenzy.', points: 28, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: 'Birthday party RSVP deadline was yesterday. Five kids now coming in... 2 hours.', points: 35, duration: 8, urgency: 'high' },
+                    { type: 'parenting', description: 'Favorite stuffed animal missing at bedtime. Code red. This is not a drill.', points: 30, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: 'Discovers permanent markers. Walls become an "art gallery."', points: 28, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: 'Emergency tooth fairy situation. No cash. ATM broken. Creative solutions needed.', points: 25, duration: 6, urgency: 'high' },
+                    { type: 'parenting', description: 'Child declares they\'re moving out... to the treehouse. Requires negotiations.', points: 15, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: '"Why?" questions reach philosophical depths. Existence questioned.', points: 18, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: 'Discovers mixing baking soda and vinegar. Kitchen now a science experiment.', points: 22, duration: 6, urgency: 'medium' },
+                    { type: 'parenting', description: 'School project requires 50 popsicle sticks. Stores closed. Time to improvise.', points: 25, duration: 7, urgency: 'high' },
+                    { type: 'parenting', description: 'Child attempts to "teach" the dog mathematics. Dog is not academic.', points: 15, duration: 4, urgency: 'low' },
+                    { type: 'parenting', description: 'Toilet paper roll art project. Entire bathroom roll... gone.', points: 20, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: 'Child starts own "restaurant." Kitchen inventory decimated.', points: 22, duration: 6, urgency: 'medium' },
+                    { type: 'parenting', description: 'Backpack zipper breaks. Papers everywhere. Contents escape to wind.', points: 20, duration: 5, urgency: 'medium' },
+                    { type: 'parenting', description: 'Child decides to give cat a "makeover." Cat strongly disagrees.', points: 25, duration: 6, urgency: 'high' }
+                ];
+                this.websiteEvents = [
+                    { type: 'website', description: 'LLM confidently outputs code... that\'s pure gibberish. Is this even Javascript?', points: 30, duration: 8, urgency: 'high' },
+                    { type: 'website', description: 'Debugging LLM-generated code... realize *you* don\'t actually understand the code either.', points: 28, duration: 7, urgency: 'high' },
+                    { type: 'website', description: 'Vercel deployment fails AGAIN with cryptic KV Store error. Rage.', points: 30, duration: 8, urgency: 'high' },
+                    { type: 'website', description: '12,000 token limit reached. LLM starts forgetting how to HTML mid-sentence.', points: 22, duration: 6, urgency: 'high' },
+                    { type: 'website', description: 'Experimental Gemini version updated *again*. Codebase from this morning now "legacy".', points: 20, duration: 6, urgency: 'medium' },
+                    { type: 'website', description: 'LLM insists on using "bleeding-edge" tech. Project now requires quantum computer to run.', points: 25, duration: 7, urgency: 'high' },
+                    { type: 'website', description: 'Error message: "Unexpected token ✨".  What does this even MEAN?', points: 18, duration: 5, urgency: 'medium' },
+                    { type: 'website', description: 'Google OAuth 2.0 setup sends you into existential documentation spiral.', points: 22, duration: 6, urgency: 'medium' },
+                    { type: 'website', description: '"One-line fix" from LLM introduces 5 new, more terrifying bugs.  Hydra-bug.', points: 28, duration: 7, urgency: 'high' },
+                    { type: 'website', description: 'LLM starts getting passive-aggressive in code comments. "Perhaps *you* would prefer a different approach?"', points: 22, duration: 6, urgency: 'medium' },
+                    { type: 'website', description: 'Suddenly remember you know approximately zero about web security.  Panic intensifies.', points: 30, duration: 8, urgency: 'high' },
+                    { type: 'website', description: 'Client asks for "serverless" everything.  Still not entirely sure what "serverless" *is*.', points: 18, duration: 5, urgency: 'medium' },
+                    { type: 'website', description: 'Documentation for new API is LLM-generated and even *it* doesn\'t understand it.', points: 20, duration: 6, urgency: 'medium' },
+                    { type: 'website', description: '"Quick prototype" balloons into 1000+ lines of spaghetti code.  Thanks, LLM.', points: 25, duration: 7, urgency: 'high' },
+                    { type: 'website', description: 'Discover LLM has been "helpfully" renaming variables to emojis.  🤬', points: 22, duration: 6, urgency: 'medium' },
+                    { type: 'website', description: 'Testing reveals game-breaking bug.  Deploy deadline is in, like, minutes.', points: 30, duration: 8, urgency: 'high' },
+                    { type: 'website', description: 'Deployment to production... triggers unexpected server meltdown.  Oops.', points: 35, duration: 9, urgency: 'MAXIMUM' },
+                    { type: 'website', description: 'Forgot to set up environment variables.  Website now displays API keys to the world.', points: 30, duration: 8, urgency: 'high' },
+                    { type: 'website', description: 'Find yourself actually *arguing* with an LLM about JSON formatting.  Losing it.', points: 30, duration: 8, urgency: 'high' },
+                    { type: 'website', description: 'Find out "free tier" on hosting platform... is not actually free.  Wallet cries.', points: 18, duration: 5, urgency: 'medium' },
+                    { type: 'website', description: 'Dependency update breaks entire build process.  npm install --force --legacy-peer-deps --please-god-work.', points: 20, duration: 6, urgency: 'medium' },
+                    { type: 'website', description: 'npm install creating new universe in node_modules. Memory leak imminent.', points: 25, duration: 6, urgency: 'high' },
+                    { type: 'website', description: 'CSS flexbox refuses to flex. Items scatter to dimensional corners.', points: 20, duration: 5, urgency: 'medium' },
+                    { type: 'website', description: 'Database migration script looks suspiciously like delete everything script.', points: 35, duration: 8, urgency: 'high' },
+                    { type: 'website', description: 'React component rendering itself into infinity. Stack traces reach parallel universe.', points: 30, duration: 7, urgency: 'high' },
+                    { type: 'website', description: 'Git merge conflict turns codebase into modern poetry. Very avant-garde.', points: 25, duration: 6, urgency: 'medium' },
+                    { type: 'website', description: 'TypeScript errors evolve sentience. Begin demanding better type definitions.', points: 28, duration: 7, urgency: 'high' },
+                    { type: 'website', description: 'CORS policy blocks everything. Even localhost thinks it\'s suspicious.', points: 22, duration: 6, urgency: 'medium' },
+                    { type: 'website', description: 'AI assistant starts reviewing YOUR code. Comments are... not supportive.', points: 20, duration: 5, urgency: 'medium' },
+                    { type: 'website', description: 'Production database connection string committed to public repo. Oops.', points: 35, duration: 8, urgency: 'high' },
+                    { type: 'website', description: 'Cache invalidation creates time paradox. Yesterday\'s data is tomorrow\'s problem.', points: 30, duration: 7, urgency: 'high' },
+                    { type: 'website', description: 'Responsive design breaks at exactly 387.5px width. Just that one size.', points: 20, duration: 5, urgency: 'medium' },
+                    { type: 'website', description: 'JWT expires faster than your coffee gets cold. Constant re-authentication.', points: 25, duration: 6, urgency: 'medium' },
+                    { type: 'website', description: 'Docker container escapes into wild. Now running cryptomining operation.', points: 32, duration: 8, urgency: 'high' },
+                    { type: 'website', description: 'webpack config achieves consciousness. Refuses to bundle on principle.', points: 28, duration: 7, urgency: 'high' },
+                    { type: 'website', description: 'AI generates 500 lines of code to print "Hello World". Very innovative.', points: 22, duration: 6, urgency: 'medium' }
+                ];
+            }
+
+            generateNewEvent() {
+                const pool = Math.random() < 0.5 ? this.parentingEvents : this.websiteEvents;
+                const index = Math.floor(Math.random() * pool.length);
+                return { ...pool[index] };
+            }
+        }
+
+        class UIManager {
+            static updateBars(parentingPoints, websiteProgress) {
+                document.getElementById('parentingValue').textContent = `${Math.max(0, parentingPoints)}%`;
+                document.getElementById('websiteValue').textContent = `${websiteProgress}%`;
+                document.getElementById('parentingBar').style.width = `${Math.max(0, parentingPoints)}%`;
+                document.getElementById('websiteBar').style.width = `${websiteProgress}%`;
+            }
+
+            static updateTimer(timeLeft) {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent =
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            static updateScore(score, combo) {
+                document.getElementById('score').textContent = score;
+                document.getElementById('combo').textContent = `${combo}x`;
+            }
+
+            static showEvent(event) { // <--- 'event' is now a parameter
+                const eventDisplay = document.getElementById('eventDescription');
+                eventDisplay.textContent = event.description;
+                const timerBar = document.getElementById('eventTimer');
+                timerBar.style.width = '100%';
+                timerBar.style.backgroundColor = this.getUrgencyColor(event.urgency);
+                eventDisplay.classList.remove('expired-event'); // Clear any previous expired class
+
+                if (window.currentEventAnimation) {
+                    window.currentEventAnimation.cancel();
+                    window.currentEventAnimation = null;
+                }
+
+                window.currentEventAnimation = timerBar.animate(
+                    [{ width: '100%' }, { width: '0%' }],
+                    { duration: event.duration * 1000, fill: 'forwards' }
+                );
+
+                window.currentEventAnimation.onfinish = () => {
+                    game.handleEventExpiration(event); // <--- PASS THE 'event' OBJECT HERE!
+                    eventDisplay.classList.add('expired-event');
+                };
+            }
+
+            static getUrgencyColor(urgency) {
+                switch (urgency) {
+                    case 'high': return '#FF5722';
+                    case 'medium': return '#FFC107';
+                    case 'low': return '#4CAF50';
+                    default: return '#FF5722';
+                }
+            }
+
+            static switchScreen(screenId) {
+                // First hide all screens
+                document.querySelectorAll('#titleScreen, #gameScreen, #gameOverScreen').forEach(screen => {
+                    screen.style.display = 'none';
+                });
+                // Then show only the requested screen
+                document.getElementById(screenId).style.display = 'block';
+            }
+
+            static showGameOver(finalScore, highScore) {
+                document.getElementById('finalScore').textContent = finalScore;
+                document.getElementById('highScore').textContent = highScore;
+                const gameOverMessage = document.getElementById('gameOverMessage');
+                if (finalScore > highScore && finalScore > 1000) {
+                    gameOverMessage.textContent = "🤯 Legendary Lab31 Sunday Survivor! Teach us your ways!";
+                } else if (finalScore > 500) {
+                    gameOverMessage.textContent = "👍 Not bad. Not great. Doing it Lab31 style!";
+                } else {
+                    gameOverMessage.textContent = "😅  Oof, rough day.  Maybe more coffee next time?";
+                }
+                this.switchScreen('gameOverScreen');
+            }
+
+            static updateCoffeeCount(coffee) {
+                document.getElementById('coffeeCount').textContent = coffee;
+            }
+
+            static setStressLevel(level) {
+                const gameContainer = document.getElementById('gameContainer');
+                gameContainer.className = 'game-container';
+                if (level > 0) {
+                    gameContainer.classList.add(`stress-level-${level}`);
+                }
+            }
+        }
+
+        class ParentDevGame {
+            constructor() {
+                this.eventManager = new EventManager();
+                this.state = {
+                    websiteProgress: 0,
+                    parentingPoints: 50,
+                    coffee: 3,
+                    timeLeft: 120,
+                    score: 0,
+                    combo: 1,
+                    currentEvent: null
+                };
+                this.gameInterval = null;
+            }
+
+            init() {
+                this.bindEvents();
+                UIManager.switchScreen('titleScreen');
+                this.updateStressLevel();
+            }
+
+            updateStressLevel() {
+                let stressLevel = 0;
+                if (this.state.parentingPoints < 40) stressLevel = 1; // Stress level 1 starts earlier
+                if (this.state.parentingPoints < 25) stressLevel = 2; // Stress level 2 starts earlier
+                if (this.state.parentingPoints < 10) stressLevel = 3;
+                UIManager.setStressLevel(stressLevel);
+            }
+
+
+            bindEvents() {
+                document.getElementById('startButton').addEventListener('click', () => this.startGame());
+                document.getElementById('parentButton').addEventListener('click', (e) => this.handleAction('parent', e));
+                document.getElementById('codeButton').addEventListener('click', (e) => this.handleAction('code', e));
+                document.getElementById('coffeeButton').addEventListener('click', (e) => this.handleAction('coffee', e));
+                document.getElementById('playAgainButton').addEventListener('click', () => this.startGame());
+            }
+
+            startGame() {
+                this.state = {
+                    websiteProgress: 0,
+                    parentingPoints: 50,
+                    coffee: 3,
+                    timeLeft: 120,
+                    score: 0,
+                    combo: 1,
+                    currentEvent: null
+                };
+                UIManager.switchScreen('gameScreen');
+                UIManager.updateBars(this.state.parentingPoints, this.state.websiteProgress);
+                UIManager.updateTimer(this.state.timeLeft);
+                UIManager.updateScore(this.state.score, this.state.combo);
+                UIManager.updateCoffeeCount(this.state.coffee);
+                this.generateNewEvent();
+                this.startGameLoop();
+                this.updateStressLevel();
+            }
+
+
+            startGameLoop() {
+                if (this.gameInterval) clearInterval(this.gameInterval);
+                this.gameInterval = setInterval(() => {
+                    this.state.timeLeft -= 1;
+                    this.state.parentingPoints = Math.max(0, this.state.parentingPoints - 0.1); // Subtle sanity drain
+                    this.state.websiteProgress = Math.min(100, this.state.websiteProgress + 0.05); // Slight website progress increase (optional - can just drain sanity)
+
+                    if (this.state.timeLeft <= 0 || this.state.parentingPoints <= 0) {
+                        this.endGame();
+                        return;
+                    }
+                    UIManager.updateTimer(this.state.timeLeft);
+                    UIManager.updateBars(this.state.parentingPoints, this.state.websiteProgress); // Update bars here too!
+                    this.updateStressLevel(); // Update stress level here too!
+                }, 1000);
+            }
+
+            generateNewEvent() {
+                const newEvent = this.eventManager.generateNewEvent();
+                this.state.currentEvent = newEvent;
+                UIManager.showEvent(newEvent);
+            }
+
+            handleAction(action, event) {
+                if (window.currentEventAnimation) {
+                    window.currentEventAnimation.cancel();
+                    window.currentEventAnimation = null;
+                }
+
+                if (event) {
+                    event.target.classList.add('active-button');
+                    setTimeout(() => event.target.classList.remove('active-button'), 60);
+                }
+
+
+                let correctAction = false;
+                if (this.state.currentEvent) {
+                    correctAction = (action === 'parent' && this.state.currentEvent.type === 'parenting') ||
+                                    (action === 'code' && this.state.currentEvent.type === 'website');
+                }
+
+                if (action === 'coffee') {
+                    if (this.state.coffee > 0) {
+                        this.state.timeLeft += 15;
+                        this.state.coffee -= 1;
+                        UIManager.updateCoffeeCount(this.state.coffee);
+                        UIManager.updateTimer(this.state.timeLeft);
+
+                        const coffeeButton = document.getElementById('coffeeButton');
+                        coffeeButton.classList.add('coffee-boost');
+                        setTimeout(() => coffeeButton.classList.remove('coffee-boost'), 1000);
+                    }
+                } else {
+                    if (action === 'parent') {
+                        this.state.parentingPoints = Math.min(this.state.parentingPoints + 10, 100);
+                        this.state.websiteProgress = Math.max(0, this.state.websiteProgress - 5);
+                    } else if (action === 'code') {
+                        this.state.websiteProgress = Math.min(this.state.websiteProgress + 10, 100);
+                        this.state.parentingPoints = Math.max(this.state.parentingPoints - 5, 0);
+                    }
+
+                    if (correctAction) {
+                        this.state.score += this.state.currentEvent.points * this.state.combo;
+                        this.state.combo = Math.min(this.state.combo + 1, 4);
+                    } else {
+                        this.state.score -= 10;
+                        this.state.combo = 1;
+                    }
+
+                    UIManager.updateBars(this.state.parentingPoints, this.state.websiteProgress);
+                    UIManager.updateScore(this.state.score, this.state.combo);
+                    this.updateStressLevel();
+                }
+
+                this.state.currentEvent = null;
+                this.generateNewEvent();
+            }
+
+            handleEventExpiration(expiredEvent) { // <--- 'expiredEvent' parameter to receive the event
+
+            const gameContainer = document.getElementById('gameContainer');
+            gameContainer.classList.add('shake');
+            setTimeout(() => gameContainer.classList.remove('shake'), 500); // Remove after 500ms
+
+                console.log("handleEventExpiration() IS BEING CALLED!");
+                console.log("Expired Event Type:", expiredEvent.type); // Let's log the type!
+                console.log("Before state update - parentingPoints:", this.state.parentingPoints, "websiteProgress:", this.state.websiteProgress, "score:", this.state.score);
+
+                const eventDisplay = document.getElementById('eventDescription');
+                eventDisplay.classList.add('expired-event');
+
+                if (expiredEvent.type === 'parenting') { // <--- Check event type and apply penalty accordingly
+                    this.state.parentingPoints = Math.max(0, this.state.parentingPoints - 20);
+                } else if (expiredEvent.type === 'website') {
+                    this.state.websiteProgress = Math.max(0, this.state.websiteProgress - 20); // Or adjust website progress!
+                }
+
+                this.state.combo = 1;
+                console.log("After state update - parentingPoints:", this.state.parentingPoints, "websiteProgress:", this.state.websiteProgress, "score:", this.state.score);
+
+                UIManager.updateBars(this.state.parentingPoints, this.state.websiteProgress);
+                UIManager.updateScore(this.state.score, this.state.combo);
+                this.updateStressLevel();
+                this.generateNewEvent();
+            }
+
+
+            endGame() {
+                clearInterval(this.gameInterval);
+                const highScore = localStorage.getItem('highScore') || 0;
+                if (this.state.score > highScore) {
+                    localStorage.setItem('highScore', this.state.score);
+                }
+                UIManager.showGameOver(this.state.score, Math.max(this.state.score, highScore));
+            }
+        }
+
+        const game = new ParentDevGame();
+        game.init();
+    </script>
+</body>
+</html>
